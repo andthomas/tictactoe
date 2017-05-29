@@ -1,6 +1,9 @@
+
+
 body {
   margin: 0 auto;
   max-width: 800px;
+  background-color:#FFFAFF;
 }
 
 h1 {
@@ -13,6 +16,7 @@ h1 {
   border: 1px solid black;
   width: 600px;
   height: 600px;
+  background-color: #EBEBEB;
 }
 
 .gameBox {

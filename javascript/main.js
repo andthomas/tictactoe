@@ -1,77 +1,43 @@
-console.log('connected');
-
 var ticTacToe = {
 
   turnCounter: 0,
 
-  gameBoard: ["n","n","n",
-              "n","n","n",
-              "n","n","n"],
+  //Red is assigned a 1 on the 3x3 board, and blue is assigned a zero
+  gameBoard: ["","","",
+              "","","",
+              "","",""],
 
-  checkForWin: function(gameboard) {
-    if ( parseInt(this.gameBoard[0]) + parseInt(this.gameBoard[3]) + parseInt(this.gameBoard[6]) === 3) {
-      alert('red wins');
-    } else if ( parseInt(this.gameBoard[0]) + parseInt(this.gameBoard[3]) + parseInt(this.gameBoard[6]) === 0) {
-      alert('blue wins');
-    }
-    if ( parseInt(this.gameBoard[1]) + parseInt(this.gameBoard[4]) + parseInt(this.gameBoard[7]) === 3) {
-      alert('red wins');
-    } else if ( parseInt(this.gameBoard[1]) + parseInt(this.gameBoard[4]) + parseInt(this.gameBoard[7]) === 0) {
-      alert('blue wins');
-    }
-    if ( parseInt(this.gameBoard[2]) + parseInt(this.gameBoard[5]) + parseInt(this.gameBoard[8]) === 3) {
-      alert('red wins');
-    } else if ( parseInt(this.gameBoard[2]) + parseInt(this.gameBoard[5]) + parseInt(this.gameBoard[8]) === 0) {
-      alert('blue wins');
-    }
-    if ( parseInt(this.gameBoard[0]) + parseInt(this.gameBoard[1]) + parseInt(this.gameBoard[2]) === 3) {
-      alert('red wins');
-    } else if ( parseInt(this.gameBoard[0]) + parseInt(this.gameBoard[1]) + parseInt(this.gameBoard[2]) === 0) {
-      alert('blue wins');
-    }
-    if ( parseInt(this.gameBoard[3]) + parseInt(this.gameBoard[4]) + parseInt(this.gameBoard[5]) === 3) {
-      alert('red wins');
-    } else if ( parseInt(this.gameBoard[3]) + parseInt(this.gameBoard[4]) + parseInt(this.gameBoard[5]) === 0) {
-      alert('blue wins');
-    }
-    if ( parseInt(this.gameBoard[6]) + parseInt(this.gameBoard[7]) + parseInt(this.gameBoard[8]) === 3) {
-      alert('red wins');
-    } else if ( parseInt(this.gameBoard[6]) + parseInt(this.gameBoard[7]) + parseInt(this.gameBoard[8]) === 0) {
-      alert('blue wins');
-    }
-    if ( parseInt(this.gameBoard[0]) + parseInt(this.gameBoard[4]) + parseInt(this.gameBoard[8]) === 3) {
-      alert('red wins');
-    } else if ( parseInt(this.gameBoard[0]) + parseInt(this.gameBoard[4]) + parseInt(this.gameBoard[8]) === 0) {
-      alert('blue wins');
-    }
-    if ( parseInt(this.gameBoard[2]) + parseInt(this.gameBoard[4]) + parseInt(this.gameBoard[6]) === 3) {
-      alert('red wins');
-    } else if ( parseInt(this.gameBoard[2]) + parseInt(this.gameBoard[4]) + parseInt(this.gameBoard[6]) === 0) {
-      alert('blue wins');
+  //There are eight possible ways to win in ticTacToe
+  wins:  { one:[0,3,6], two:[1,4,7], three:[2,5,8], four:[0,1,2], five:[3,4,5], six:[6,7,8], seven:[0,4,8], eight:[2,4,6] },
+
+  checkForWin: function() {
+    for (var x in this.wins) {
+      if ( parseInt(this.gameBoard[this.wins[x][0]]) + parseInt(this.gameBoard[this.wins[x][1]]) + parseInt(this.gameBoard[this.wins[x][2]]) === 3) {
+        setTimeout(function () {
+          alert('red wins');
+        }, 100);
+        true;
+        return;
+      } else if ( parseInt(this.gameBoard[this.wins[x][0]]) + parseInt(this.gameBoard[this.wins[x][1]]) + parseInt(this.gameBoard[this.wins[x][2]]) === 0) {
+        setTimeout(function () {
+          alert('blue wins');
+        }, 100);
+        true;
+        return;
+      }
     }
   },
 
   isOdd: function(turnCounter) {
     if (turnCounter % 2) {
       0;
-      // console.log(true);
       return true;
-  } else {
-      // console.log(false);
-      return false;
+    } else {
+        return false;
+    }
   }
-}
 
 };
-
-$( document ).ready(function(){
-
-  // var doubleCheck = function($this) {
-  //   if ( $this.hasClass('gamebox red') || $this.hasClass('gamebox blue') ) {
-  //     console.log("Pick a different box");
-  //     break;
-  //   }
-  // }
 
   var score = function($this) {
     if ($this.is("#tl")) {
@@ -140,24 +106,29 @@ $( document ).ready(function(){
     }
 }
 
-  $('.gameBox').on('click', function(){
-    var $this = $(this);
-    // var $this = $(this);
-    // doubleCheck()
+$('.gameBox').on('click', function(){
+  var $this = $(this);
 
-    ticTacToe.turnCounter = parseInt(ticTacToe.turnCounter) + 1;
-    // console.log(ticTacToe.turnCounter)
+  if ( $this.hasClass('red') || $this.hasClass('blue') ) {
+    alert('Pick a different square');
+    return;
+  }
 
-      if (ticTacToe.isOdd(ticTacToe.turnCounter) == true) {
-        $(this).addClass('blue')
-        console.log(this.id)
-      } else {
-        $(this).addClass('red')
-        console.log(this.id)
-      }
+  ticTacToe.turnCounter = parseInt(ticTacToe.turnCounter) + 1;
+  // console.log(ticTacToe.turnCounter)
 
-    score($this);
+  if (ticTacToe.isOdd(ticTacToe.turnCounter) == true) {
+    $(this).addClass('blue')
+    console.log(this.id)
+  } else {
+    $(this).addClass('red')
+    console.log(this.id)
+  }
 
-    ticTacToe.checkForWin();
-    })
-  })
+  score($this);
+
+  if (ticTacToe.checkForWin() == true) {
+    $(".gameBox red", ".gameBox blue").attr("class", "gameBox")
+    return;
+  }
+})
