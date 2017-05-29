@@ -106,7 +106,7 @@ var ticTacToe = {
     }
 }
 
-$('.gameBox').on('click', function(){
+$('td').on('click', function(){
   var $this = $(this);
 
   if ( $this.hasClass('red') || $this.hasClass('blue') ) {
@@ -118,10 +118,10 @@ $('.gameBox').on('click', function(){
   // console.log(ticTacToe.turnCounter)
 
   if (ticTacToe.isOdd(ticTacToe.turnCounter) == true) {
-    $(this).addClass('blue')
+    $(this).addClass('blue').fadeIn( "slow", function() {});
     console.log(this.id)
   } else {
-    $(this).addClass('red')
+    $(this).addClass('red').fadeIn( "slow", function() {});
     console.log(this.id)
   }
 
