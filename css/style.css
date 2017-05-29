@@ -11,6 +11,7 @@ h1 {
   text-align: center;
   font-size: 30px;
   font-family: 'Raleway', sans-serif;
+  color: rgb(57, 57, 57);
 }
 
 table {
@@ -18,16 +19,17 @@ table {
   height: 500px;
   margin: 0 auto;
   background-color:#FFFAFF;
+  border: 4px black;
 }
 
 td {
   width: 32.5%;
   height: 32.5%;
   background-color:#c0e8fa;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
-.red {
+.cross {
   background-image: url(../images/cross.png);
   background-repeat: no-repeat;
   -webkit-background-size: cover;
@@ -36,7 +38,7 @@ td {
   background-size: cover;
 }
 
-.blue {
+.naught {
   background-image: url(../images/zero.png);
   background-repeat: no-repeat;
   -webkit-background-size: cover;
