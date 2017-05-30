@@ -2,16 +2,16 @@ var ticTacToe = {
 
   turnCounter: 0,
 
-  //Red is assigned a 1 on the 3x3 board, and blue is assigned a zero
-  gameBoard: ["","","",
-              "","","",
-              "","",""],
+  //gameBoard has 9 indicies to represent the 9 squares on a ticTacToe board. The 0th index represents the top left, 1st is the top middle, 2nd is top right, 3rd is center left and so on.
+  gameBoard: ["","","","","","","","",""],
 
-  //There are eight possible ways to win in ticTacToe
+  //There are eight possible ways to win in ticTacToe, these combinations are represented by the following index values of 'gameBoard'
   wins:  { one:[0,3,6], two:[1,4,7], three:[2,5,8], four:[0,1,2], five:[3,4,5], six:[6,7,8], seven:[0,4,8], eight:[2,4,6] },
 
   checkForWin: function() {
+    //Loop through each possible winning combination recorded in the 'wins' object
     for (var x in this.wins) {
+      //if one of the winning index combinations from 'wins' is equal to 3, crosses win. If it is equal to 0, naughts win. This is because crosses are assigned a 1 for each of their moves and naughts are assigned a 0.
       if ( parseInt(this.gameBoard[this.wins[x][0]]) + parseInt(this.gameBoard[this.wins[x][1]]) + parseInt(this.gameBoard[this.wins[x][2]]) === 3) {
         setTimeout(function () {
           alert('Crosses wins');
@@ -24,6 +24,11 @@ var ticTacToe = {
         }, 100);
         true;
         return;
+      } else if (this.turnCounter === 9) {
+        setTimeout(function () {
+          alert('Draw');
+        }, 100);
+        return;
       }
     }
   },
@@ -33,100 +38,57 @@ var ticTacToe = {
       0;
       return true;
     } else {
-        return false;
+      return false;
     }
+  },
+
+  recordScore: function(inputId) {
+    //loop through each square in the table
+    $( "td" ).each(function( index ) {
+      //loop through each possible id of the squares and record it as 'currentId'
+      for (var i = 0; i < 9; i++) {
+        currentId = "#" + i.toString();
+        //Determine if the current square id from the each loop matches the current square id from the for loop
+        if (inputId.is(currentId)) {
+          //Use the number from the for loop as the index of the score in the gameboard array. This works because the id's of the squares on the gameboard are from #0 => #8 and the gameboard array is indexed from [0] => [8].
+          if (inputId.is(".cross")) {
+            //cross assigned a 1 and naught is assigned a 0
+            ticTacToe.gameBoard[i] = "1";
+          } else if (inputId.is(".naught")) {
+              ticTacToe.gameBoard[i] = "0";
+            }
+          return
+        }//if
+      }//for
+    })//each
   }
 
 };
 
-  var score = function($this) {
-    if ($this.is("#tl")) {
-      if ($this.is(".cross")) {
-        ticTacToe.gameBoard[0] = "1";
-      } else if ($this.is(".naught")) {
-          ticTacToe.gameBoard[0] = "0";
-        }
-      return
-    } else if ($this.is("#tm")) {
-      if ($this.is(".cross")) {
-        ticTacToe.gameBoard[1] = "1";
-      } else if ($this.is(".naught")) {
-          ticTacToe.gameBoard[1] = "0";
-        }
-      return
-    } else if ($this.is("#tr")) {
-      if ($this.is(".cross")) {
-        ticTacToe.gameBoard[2] = "1";
-      } else if ($this.is(".naught")) {
-          ticTacToe.gameBoard[2] = "0";
-        }
-        return
-    } else if ($this.is("#cl")) {
-      if ($this.is(".cross")) {
-        ticTacToe.gameBoard[3] = "1";
-      } else if ($this.is(".naught")) {
-          ticTacToe.gameBoard[3] = "0";
-        }
-        return
-    } else if ($this.is("#cm")) {
-      if ($this.is(".cross")) {
-        ticTacToe.gameBoard[4] = "1";
-      } else if ($this.is(".naught")) {
-          ticTacToe.gameBoard[4] = "0";
-        }
-        return
-    } else if ($this.is("#cr")) {
-      if ($this.is(".cross")) {
-        ticTacToe.gameBoard[5] = "1";
-      } else if ($this.is(".naught")) {
-          ticTacToe.gameBoard[5] = "0";
-        }
-      return
-    } else if ($this.is("#bl")) {
-      if ($this.is(".cross")) {
-        ticTacToe.gameBoard[6] = "1";
-      } else if ($this.is(".naught")) {
-          ticTacToe.gameBoard[6] = "0";
-        }
-        return
-    } else if ($this.is("#bm")) {
-      if ($this.is(".cross")) {
-        ticTacToe.gameBoard[7] = "1";
-      } else if ($this.is(".naught")) {
-          ticTacToe.gameBoard[7] = "0";
-        }
-      return
-    } else if ($this.is("#br")) {
-      if ($this.is(".cross")) {
-        ticTacToe.gameBoard[8] = "1";
-      } else if ($this.is(".naught")) {
-          ticTacToe.gameBoard[8] = "0";
-        }
-        return
-    }
-}
-
 $('td').on('click', function(){
+  //the click on the current square is represented by $this
   var $this = $(this);
 
+  //Don't do anything if the current square has already been clicked on
   if ( $this.hasClass('cross') || $this.hasClass('naught') ) {
     alert('Pick a different square');
     return;
   }
 
+  //Determine whose turn it is
   ticTacToe.turnCounter = parseInt(ticTacToe.turnCounter) + 1;
-  // console.log(ticTacToe.turnCounter)
 
+  //Place naught or cross on the table
   if (ticTacToe.isOdd(ticTacToe.turnCounter) == true) {
     $(this).addClass('naught')
-    console.log(this.id)
   } else {
     $(this).addClass('cross')
-    console.log(this.id)
   }
 
-  score($this);
+  //Record this score in the gameboard array
+  ticTacToe.recordScore($this);
 
+  //Check if there is a winner
   if (ticTacToe.checkForWin() == true) {
     $(".gameBox cross", ".gameBox naught").attr("class", "gameBox")
     return;
