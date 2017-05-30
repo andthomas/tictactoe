@@ -14,12 +14,19 @@ h1 {
   color: rgb(57, 57, 57);
 }
 
+#tableContainer {
+  width: 500px;
+  height: 500px;
+  margin: 0 auto;
+}
+
 table {
+  position: absolute;
   width: 500px;
   height: 500px;
   margin: 0 auto;
   background-color:#FFFAFF;
-  border: 4px black;
+  border-radius: 6px;
 }
 
 td {
@@ -27,6 +34,7 @@ td {
   height: 32.5%;
   background-color:#c0e8fa;
   border-radius: 6px;
+
 }
 
 .cross {
@@ -45,4 +53,36 @@ td {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+}
+
+#alertBox {
+  margin: 0 auto;
+  position: absolute;
+  height: 498px;
+  width: 500px;
+  background-color: #bfece6;
+  opacity: 0.7;
+  box-shadow: 0px 0px 15px #888888;
+  border-radius: 6px;
+  display: none;
+}
+
+p {
+  text-align: center;
+  font-size: 30px;
+  font-family: 'Raleway', sans-serif;
+  color: rgb(57, 57, 57);
+  margin-top: 230px;
+}
+
+#draw {
+  display: none;
+}
+
+#crossWin {
+  display: none;
+}
+
+#naughtWin {
+  display: none;
 }

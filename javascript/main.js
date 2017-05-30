@@ -14,20 +14,29 @@ var ticTacToe = {
       //if one of the winning index combinations from 'wins' is equal to 3, crosses win. If it is equal to 0, naughts win. This is because crosses are assigned a 1 for each of their moves and naughts are assigned a 0.
       if ( parseInt(this.gameBoard[this.wins[x][0]]) + parseInt(this.gameBoard[this.wins[x][1]]) + parseInt(this.gameBoard[this.wins[x][2]]) === 3) {
         setTimeout(function () {
-          alert('Crosses wins');
-        }, 100);
+          $("#alertBox, #crossWin").fadeIn("slow", function() {
+          $('#alertBox').css('display', 'block')
+          $('#crossWin').css('display', 'block')
+        });
+        }, 50);
         true;
         return;
       } else if ( parseInt(this.gameBoard[this.wins[x][0]]) + parseInt(this.gameBoard[this.wins[x][1]]) + parseInt(this.gameBoard[this.wins[x][2]]) === 0) {
         setTimeout(function () {
-          alert('Naughts wins');
-        }, 100);
+          $("#alertBox, #naughtWin").fadeIn("slow", function() {
+          $('#alertBox').css('display', 'block')
+          $('#naughtWin').css('display', 'block')
+        });
+        }, 50);
         true;
         return;
       } else if (this.turnCounter === 9) {
         setTimeout(function () {
-          alert('Draw');
-        }, 100);
+          $("#alertBox, #draw").fadeIn("slow", function() {
+          $('#alertBox').css('display', 'block')
+          $('#draw').css('display', 'block')
+        });
+        }, 50);
         return;
       }
     }
@@ -42,25 +51,15 @@ var ticTacToe = {
     }
   },
 
-  recordScore: function(inputId) {
-    //loop through each square in the table
-    $( "td" ).each(function( index ) {
-      //loop through each possible id of the squares and record it as 'currentId'
-      for (var i = 0; i < 9; i++) {
-        currentId = "#" + i.toString();
-        //Determine if the current square id from the each loop matches the current square id from the for loop
-        if (inputId.is(currentId)) {
-          //Use the number from the for loop as the index of the score in the gameboard array. This works because the id's of the squares on the gameboard are from #0 => #8 and the gameboard array is indexed from [0] => [8].
-          if (inputId.is(".cross")) {
-            //cross assigned a 1 and naught is assigned a 0
-            ticTacToe.gameBoard[i] = "1";
-          } else if (inputId.is(".naught")) {
-              ticTacToe.gameBoard[i] = "0";
-            }
-          return
-        }//if
-      }//for
-    })//each
+  recordScore: function(thisId, thisClass) {
+    num = parseInt(thisId);
+    if (thisClass.is(".cross")) {
+      ticTacToe.gameBoard[num] = "1";
+      return
+    } else if (thisClass.is(".naught")) {
+      ticTacToe.gameBoard[num] = "0";
+      return
+    }
   }
 
 };
@@ -68,6 +67,7 @@ var ticTacToe = {
 $('td').on('click', function(){
   //the click on the current square is represented by $this
   var $this = $(this);
+  var thisId = this.id;
 
   //Don't do anything if the current square has already been clicked on
   if ( $this.hasClass('cross') || $this.hasClass('naught') ) {
@@ -85,8 +85,7 @@ $('td').on('click', function(){
     $(this).addClass('cross')
   }
 
-  //Record this score in the gameboard array
-  ticTacToe.recordScore($this);
+  ticTacToe.recordScore(thisId, $this);
 
   //Check if there is a winner
   if (ticTacToe.checkForWin() == true) {
