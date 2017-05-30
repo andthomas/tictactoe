@@ -7,7 +7,7 @@ body {
 }
 
 h1 {
-  margin-top: 5%;
+  padding: 2%;
   text-align: center;
   font-size: 30px;
   font-family: 'Raleway', sans-serif;
@@ -58,13 +58,14 @@ td {
 #alertBox {
   margin: 0 auto;
   position: absolute;
-  height: 498px;
+  height: 288px;
   width: 500px;
   background-color: #bfece6;
   opacity: 0.7;
   box-shadow: 0px 0px 15px #888888;
   border-radius: 6px;
   display: none;
+  padding-top: 210px;
 }
 
 p {
@@ -72,7 +73,6 @@ p {
   font-size: 30px;
   font-family: 'Raleway', sans-serif;
   color: rgb(57, 57, 57);
-  margin-top: 230px;
 }
 
 #draw {
@@ -85,4 +85,37 @@ p {
 
 #naughtWin {
   display: none;
+}
+
+#scoreBoard {
+  margin-top: 3%;
+  margin-left: auto;
+  margin-right: auto;
+  height: 120px;
+  width: 500px;
+  background-color: #c0e8fa;
+  border-radius: 6px;
+}
+
+#naughtsScore, #drawScore, #crossesScore, #hN, #hD, #hC {
+ width: 32%;
+ height: 50%;
+ display: inline-block;
+}
+
+#hN, #hD, #hC {
+  font-size: 22px;
+  text-align: center;
+  padding-top: 20px;
+  height: 30%;
+  font-family: 'Raleway', sans-serif;
+  color: #FFFAFF;
+}
+
+#naughtsScore, #drawScore, #crossesScore {
+  font-size: 26px;
+  text-align: center;
+  font-family: 'Raleway', sans-serif;
+  color: #FFFAFF;
+  font-weight: bold;
 }

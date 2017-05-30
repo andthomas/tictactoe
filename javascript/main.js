@@ -2,43 +2,21 @@ var ticTacToe = {
 
   turnCounter: 0,
 
+  drawCounter: 0,
+
+  naughtCounter: 0,
+
+  crossCounter: 0,
+
   //gameBoard has 9 indicies to represent the 9 squares on a ticTacToe board. The 0th index represents the top left, 1st is the top middle, 2nd is top right, 3rd is center left and so on.
   gameBoard: ["","","","","","","","",""],
 
   //There are eight possible ways to win in ticTacToe, these combinations are represented by the following index values of 'gameBoard'
   wins:  { one:[0,3,6], two:[1,4,7], three:[2,5,8], four:[0,1,2], five:[3,4,5], six:[6,7,8], seven:[0,4,8], eight:[2,4,6] },
 
-  checkForWin: function() {
-    //Loop through each possible winning combination recorded in the 'wins' object
+  checkWin: function(player) {
     for (var x in this.wins) {
-      //if one of the winning index combinations from 'wins' is equal to 3, crosses win. If it is equal to 0, naughts win. This is because crosses are assigned a 1 for each of their moves and naughts are assigned a 0.
-      if ( parseInt(this.gameBoard[this.wins[x][0]]) + parseInt(this.gameBoard[this.wins[x][1]]) + parseInt(this.gameBoard[this.wins[x][2]]) === 3) {
-        setTimeout(function () {
-          $("#alertBox, #crossWin").fadeIn("slow", function() {
-          $('#alertBox').css('display', 'block')
-          $('#crossWin').css('display', 'block')
-        });
-        }, 50);
-        true;
-        return;
-      } else if ( parseInt(this.gameBoard[this.wins[x][0]]) + parseInt(this.gameBoard[this.wins[x][1]]) + parseInt(this.gameBoard[this.wins[x][2]]) === 0) {
-        setTimeout(function () {
-          $("#alertBox, #naughtWin").fadeIn("slow", function() {
-          $('#alertBox').css('display', 'block')
-          $('#naughtWin').css('display', 'block')
-        });
-        }, 50);
-        true;
-        return;
-      } else if (this.turnCounter === 9) {
-        setTimeout(function () {
-          $("#alertBox, #draw").fadeIn("slow", function() {
-          $('#alertBox').css('display', 'block')
-          $('#draw').css('display', 'block')
-        });
-        }, 50);
-        return;
-      }
+      if ( parseInt(this.gameBoard[this.wins[x][0]]) + parseInt(this.gameBoard[this.wins[x][1]]) + parseInt(this.gameBoard[this.wins[x][2]]) === 3 || parseInt(this.gameBoard[this.wins[x][0]]) + parseInt(this.gameBoard[this.wins[x][1]]) + parseInt(this.gameBoard[this.wins[x][2]]) === 0 ) { return true; }
     }
   },
 
@@ -61,7 +39,6 @@ var ticTacToe = {
       return
     }
   }
-
 };
 
 $('td').on('click', function(){
@@ -88,8 +65,56 @@ $('td').on('click', function(){
   ticTacToe.recordScore(thisId, $this);
 
   //Check if there is a winner
-  if (ticTacToe.checkForWin() == true) {
-    $(".gameBox cross", ".gameBox naught").attr("class", "gameBox")
-    return;
+  var isWin = ticTacToe.checkWin(this)
+
+  if (isWin === true) {
+    if ($this.hasClass('cross')) {
+      ticTacToe.crossCounter += 1
+      setTimeout(function () {
+        $("#alertBox, #crossWin").fadeIn("slow", function() {
+          $('#alertBox').css('display', 'block')
+          $('#crossWin').css('display', 'block')
+        });
+      }, 50);
+    } else {
+      setTimeout(function () {
+        ticTacToe.naughtCounter += 1
+        $("#alertBox, #naughtWin").fadeIn("slow", function() {
+          $('#alertBox').css('display', 'block')
+          $('#naughtWin').css('display', 'block')
+        });
+      }, 50);
+    }
+  } else if( ticTacToe.turnCounter === 9 ){
+    // notify of draw
+    setTimeout(function () {
+      ticTacToe.drawCounter += 1
+      $("#alertBox, #draw").fadeIn("slow", function() {
+        $('#alertBox').css('display', 'block')
+        $('#draw').css('display', 'block')
+      });
+    }, 50);
   }
-})
+
+console.log(ticTacToe.naughtCounter);
+
+});
+
+$('#alertBox').on('click', function() {
+  $("td").removeClass('naught');
+  $("td").removeClass('cross');
+
+  $("#alertBox").fadeOut("slow", function() {
+    $('#alertBox').css('display', 'none')
+    $('#naughtWin').css('display', 'none')
+    $('#crossWin').css('display', 'none')
+    $('#draw').css('display', 'none')
+  });
+
+  ticTacToe.gameBoard = ["","","","","","","","",""]
+  ticTacToe.turnCounter = 0;
+
+  $("#naughtsScore").text(ticTacToe.naughtCounter);
+  $("#drawScore").text(ticTacToe.drawCounter);
+  $("#crossesScore").text(ticTacToe.crossCounter);
+});
