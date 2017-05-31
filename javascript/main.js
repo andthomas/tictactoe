@@ -16,7 +16,9 @@ var ticTacToe = {
 
   checkWin: function(player) {
     for (var x in this.wins) {
-      if ( parseInt(this.gameBoard[this.wins[x][0]]) + parseInt(this.gameBoard[this.wins[x][1]]) + parseInt(this.gameBoard[this.wins[x][2]]) === 3 || parseInt(this.gameBoard[this.wins[x][0]]) + parseInt(this.gameBoard[this.wins[x][1]]) + parseInt(this.gameBoard[this.wins[x][2]]) === 0 ) { return true; }
+      if ( parseInt(this.gameBoard[this.wins[x][0]]) + parseInt(this.gameBoard[this.wins[x][1]]) + parseInt(this.gameBoard[this.wins[x][2]]) === 3 || parseInt(this.gameBoard[this.wins[x][0]]) + parseInt(this.gameBoard[this.wins[x][1]]) + parseInt(this.gameBoard[this.wins[x][2]]) === 0 ) {
+        return true;
+      }
     }
   },
 
@@ -48,7 +50,6 @@ $('td').on('click', function(){
 
   //Don't do anything if the current square has already been clicked on
   if ( $this.hasClass('cross') || $this.hasClass('naught') ) {
-    alert('Pick a different square');
     return;
   }
 
@@ -68,6 +69,7 @@ $('td').on('click', function(){
   var isWin = ticTacToe.checkWin(this)
 
   if (isWin === true) {
+    gameHide();
     if ($this.hasClass('cross')) {
       ticTacToe.crossCounter += 1
       setTimeout(function () {
@@ -75,7 +77,7 @@ $('td').on('click', function(){
           $('#alertBox').css('display', 'block')
           $('#crossWin').css('display', 'block')
         });
-      }, 50);
+      }, 1000);
     } else {
       setTimeout(function () {
         ticTacToe.naughtCounter += 1
@@ -83,20 +85,19 @@ $('td').on('click', function(){
           $('#alertBox').css('display', 'block')
           $('#naughtWin').css('display', 'block')
         });
-      }, 50);
+      }, 1000);
     }
   } else if( ticTacToe.turnCounter === 9 ){
     // notify of draw
     setTimeout(function () {
       ticTacToe.drawCounter += 1
-      $("#alertBox, #draw").fadeIn("slow", function() {
+      $("#alertBox, #draw").fadeIn(function() {
         $('#alertBox').css('display', 'block')
         $('#draw').css('display', 'block')
       });
-    }, 50);
+    }, 1000);
   }
 
-console.log(ticTacToe.naughtCounter);
 
 });
 
@@ -104,7 +105,7 @@ $('#alertBox').on('click', function() {
   $("td").removeClass('naught');
   $("td").removeClass('cross');
 
-  $("#alertBox").fadeOut("slow", function() {
+  $("#alertBox").fadeOut(function() {
     $('#alertBox').css('display', 'none')
     $('#naughtWin').css('display', 'none')
     $('#crossWin').css('display', 'none')
@@ -117,4 +118,41 @@ $('#alertBox').on('click', function() {
   $("#naughtsScore").text(ticTacToe.naughtCounter);
   $("#drawScore").text(ticTacToe.drawCounter);
   $("#crossesScore").text(ticTacToe.crossCounter);
+  gameLoad();
+});
+
+var gameLoad = function() {
+  $("#leftVert").animate({height: '500px'}, 'slow');
+
+  setTimeout(function () {
+    $("#rightVert").animate({height: '500px'}, 'slow');
+  },200);
+
+  setTimeout(function () {
+  $("#topHor").animate({width: '500px'}, 'slow');
+  }, 400);
+
+  setTimeout(function () {
+  $("#botHor").animate({width: '500px'}, 'slow');
+  }, 600);
+}
+
+var gameHide = function() {
+  $("#leftVert").animate({height: '0px'}, 'slow');
+
+  setTimeout(function () {
+    $("#rightVert").animate({height: '0px'}, 'slow');
+  },200);
+
+  setTimeout(function () {
+  $("#topHor").animate({width: '0px'}, 'slow');
+  }, 400);
+
+  setTimeout(function () {
+  $("#botHor").animate({width: '0px'}, 'slow');
+  }, 600);
+}
+
+$(window).load(function(){
+  gameLoad();
 });

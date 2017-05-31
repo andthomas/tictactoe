@@ -1,9 +1,13 @@
-
+/** {
+  border: 1px solid black;
+}*/
 
 body {
   margin: 0 auto;
   max-width: 800px;
   background-color:#FFFAFF;
+  z-index: -2;
+  position: relative;
 }
 
 h1 {
@@ -15,8 +19,10 @@ h1 {
 }
 
 #tableContainer {
+  position: relative;
   width: 500px;
   height: 500px;
+  z-index: -1;
   margin: 0 auto;
 }
 
@@ -27,38 +33,41 @@ table {
   margin: 0 auto;
   background-color:#FFFAFF;
   border-radius: 6px;
+  top: -500;
 }
 
 td {
   width: 32.5%;
   height: 32.5%;
-  background-color:#c0e8fa;
+  background-color:#FFFAFF;
   border-radius: 6px;
-
+  z-index: 2;
 }
 
 .cross {
-  background-image: url(../images/cross.png);
+  background-image: url(../images/x.png);
   background-repeat: no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  z-index: 2;
 }
 
 .naught {
-  background-image: url(../images/zero.png);
+  background-image: url(../images/o.png);
   background-repeat: no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  z-index: 2;
 }
 
 #alertBox {
   margin: 0 auto;
   position: absolute;
-  height: 288px;
+  height: 290px;
   width: 500px;
   background-color: #bfece6;
   opacity: 0.7;
@@ -66,6 +75,7 @@ td {
   border-radius: 6px;
   display: none;
   padding-top: 210px;
+  z-index: 2;
 }
 
 p {
@@ -118,4 +128,48 @@ p {
   font-family: 'Raleway', sans-serif;
   color: #FFFAFF;
   font-weight: bold;
+}
+
+#leftVert {
+  width: 12px;
+  height: 0px;
+  background-color: #c0e8fa;
+  position: absolute;
+  top: 0px;
+  left: 31.5%;
+  border-radius: 3px;
+  z-index: 1;
+  display: inline;
+}
+
+#rightVert {
+  width: 12px;
+  height: 0px;
+  background-color: #c0e8fa;
+  position: absolute;
+  top: 0px;
+  left: 65%;
+  border-radius: 3px;
+  z-index: 1;
+  display: inline;
+}
+
+#topHor {
+  width: 0px;
+  height: 10px;
+  background-color: #c0e8fa;
+  position: absolute;
+  top: 160px;
+  border-radius: 3px;
+  z-index: 1;
+}
+
+#botHor{
+  width: 0px;
+  height: 10px;
+  background-color: #c0e8fa;
+  position: absolute;
+  top: 320px;
+  border-radius: 3px;
+  z-index: 1;
 }
