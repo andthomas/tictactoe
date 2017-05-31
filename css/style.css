@@ -42,6 +42,7 @@ td {
   background-color:#FFFAFF;
   border-radius: 6px;
   z-index: 2;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 .cross {
@@ -105,6 +106,7 @@ p {
   width: 500px;
   background-color: #c0e8fa;
   border-radius: 6px;
+  display: none;
 }
 
 #naughtsScore, #drawScore, #crossesScore, #hN, #hD, #hC {
@@ -159,7 +161,7 @@ p {
   height: 10px;
   background-color: #c0e8fa;
   position: absolute;
-  top: 160px;
+  top: 157px;
   border-radius: 3px;
   z-index: 1;
 }
@@ -169,7 +171,7 @@ p {
   height: 10px;
   background-color: #c0e8fa;
   position: absolute;
-  top: 320px;
+  top: 324px;
   border-radius: 3px;
   z-index: 1;
 }

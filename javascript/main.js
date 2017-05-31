@@ -69,7 +69,6 @@ $('td').on('click', function(){
   var isWin = ticTacToe.checkWin(this)
 
   if (isWin === true) {
-    gameHide();
     if ($this.hasClass('cross')) {
       ticTacToe.crossCounter += 1
       setTimeout(function () {
@@ -77,7 +76,7 @@ $('td').on('click', function(){
           $('#alertBox').css('display', 'block')
           $('#crossWin').css('display', 'block')
         });
-      }, 1000);
+      }, 50);
     } else {
       setTimeout(function () {
         ticTacToe.naughtCounter += 1
@@ -85,7 +84,7 @@ $('td').on('click', function(){
           $('#alertBox').css('display', 'block')
           $('#naughtWin').css('display', 'block')
         });
-      }, 1000);
+      }, 50);
     }
   } else if( ticTacToe.turnCounter === 9 ){
     // notify of draw
@@ -95,22 +94,23 @@ $('td').on('click', function(){
         $('#alertBox').css('display', 'block')
         $('#draw').css('display', 'block')
       });
-    }, 1000);
+    }, 50);
   }
 
 
 });
 
 $('#alertBox').on('click', function() {
+  gameHide();
   $("td").removeClass('naught');
   $("td").removeClass('cross');
 
-  $("#alertBox").fadeOut(function() {
+  $("#alertBox").fadeOut("slow",function() {
     $('#alertBox').css('display', 'none')
     $('#naughtWin').css('display', 'none')
     $('#crossWin').css('display', 'none')
     $('#draw').css('display', 'none')
-  });
+
 
   ticTacToe.gameBoard = ["","","","","","","","",""]
   ticTacToe.turnCounter = 0;
@@ -119,40 +119,40 @@ $('#alertBox').on('click', function() {
   $("#drawScore").text(ticTacToe.drawCounter);
   $("#crossesScore").text(ticTacToe.crossCounter);
   gameLoad();
+  });
 });
 
 var gameLoad = function() {
-  $("#leftVert").animate({height: '500px'}, 'slow');
-
+  setTimeout(function () {
+    $("#leftVert").animate({height: '500px'}, 'slow');
+  });
   setTimeout(function () {
     $("#rightVert").animate({height: '500px'}, 'slow');
-  },200);
+  }, 300);
 
   setTimeout(function () {
-  $("#topHor").animate({width: '500px'}, 'slow');
-  }, 400);
+    $("#topHor").animate({width: '500px'}, 'slow');
+  }, 500);
 
   setTimeout(function () {
-  $("#botHor").animate({width: '500px'}, 'slow');
-  }, 600);
+    $("#botHor").animate({width: '500px'}, 'slow');
+  },700);
 }
 
 var gameHide = function() {
-  $("#leftVert").animate({height: '0px'}, 'slow');
-
-  setTimeout(function () {
-    $("#rightVert").animate({height: '0px'}, 'slow');
-  },200);
-
-  setTimeout(function () {
-  $("#topHor").animate({width: '0px'}, 'slow');
-  }, 400);
-
-  setTimeout(function () {
-  $("#botHor").animate({width: '0px'}, 'slow');
-  }, 600);
+  $("#leftVert, #rightVert, #topHor, #botHor").fadeOut(function() {
+    $("#leftVert, #rightVert").css("height", '0px');
+    $("#topHor, #botHor").css("width", '0px');
+  });
+  $("#leftVert, #rightVert, #topHor, #botHor").fadeIn(function() {
+    $("#leftVert, #rightVert").css("height", '0px');
+    $("#topHor, #botHor").css("width", '0px');
+  });
 }
 
 $(window).load(function(){
   gameLoad();
+  $("#scoreBoard").fadeIn(function() {
+    $("#scoreBoard").css("height", "120px");
+  });
 });
