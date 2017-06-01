@@ -4,42 +4,73 @@ var ticTacToe = {
 
   scores: { drawCounter: 0, naughtCounter: 0, crossCounter: 0 },
 
-  //gameBoard has 9 indicies to represent the 9 squares on a ticTacToe board. The 0th index represents the top left, 1st is the top middle, 2nd is top right, 3rd is center left and so on.
-  gameBoard: ["","","","","","","","",""],
+  gameBoard: ["/","/","/","/","/","/","/","/","/"],
 
-  //There are eight possible ways to win in ticTacToe, these combinations are represented by the following index values of 'gameBoard'
   wins:  { one:[0,3,6], two:[1,4,7], three:[2,5,8], four:[0,1,2], five:[3,4,5], six:[6,7,8], seven:[0,4,8], eight:[2,4,6] },
 
-  checkWin: function(player) {
+  checkWin: function() {
     for (var x in this.wins) {
-      if ( parseInt(this.gameBoard[this.wins[x][0]]) + parseInt(this.gameBoard[this.wins[x][1]]) + parseInt(this.gameBoard[this.wins[x][2]]) === 3 || parseInt(this.gameBoard[this.wins[x][0]]) + parseInt(this.gameBoard[this.wins[x][1]]) + parseInt(this.gameBoard[this.wins[x][2]]) === 0 ) {
+      if (this.gameBoard[this.wins[x][0]] === "o" && this.gameBoard[this.wins[x][2]] === "o" && this.gameBoard[this.wins[x][1]] === "o") {
         return true;
       }
-    }
+      else if (this.gameBoard[this.wins[x][0]] === "x" && this.gameBoard[this.wins[x][2]] === "x" && this.gameBoard[this.wins[x][1]] === "x")  {
+        return false;
+      }//if
+    }//for
   },
 
-  isOdd: function(turnCounter) {
-    if (turnCounter % 2) {
-      0;
-      return true;
-    } else {
-      return false;
-    }
+  //An empty array to store possible defensive moves for Albert
+  moves: { },
+
+  // Albert checks if there is any winning combinations with naughts in a row
+  checkSpace: function() {
+    for (var x in this.wins) {
+      if ( (this.gameBoard[this.wins[x][0]] === "o" && this.gameBoard[this.wins[x][1]] === "o") ||
+      (this.gameBoard[this.wins[x][1]] === "o" && this.gameBoard[this.wins[x][2]] === "o") ||
+      (this.gameBoard[this.wins[x][0]] === "o" && this.gameBoard[this.wins[x][2]] === "o") ) {
+
+        this.moves["'" + x + "'"] = (this.wins[x])
+      }//if
+    }//for
   },
 
-  recordScore: function(thisId, thisClass) {
-    num = parseInt(thisId);
-    if (thisClass.is(".cross")) {
-      ticTacToe.gameBoard[num] = "1";
-      return
-    } else if (thisClass.is(".naught")) {
-      ticTacToe.gameBoard[num] = "0";
-      return
+  //Albert looks through the winning combos with 2 in a row and identifies the empty third space
+  defensiveMove: function() {
+    for ( var x in this.moves ) {
+      for ( var i = 0; i < this.moves[x].length; i++ ) {
+        var poss = this.moves[x][i]
+        if ( this.gameBoard[poss] === "/") {
+          return poss;
+        }
+      }
     }
   }
-};
+
+}
 
 $(document).ready(function() {
+
+  var showEndgame = function(winCounter, winId) {
+    ticTacToe.scores[winCounter] += 1
+    setTimeout(function () {
+      $("#alertBox, " + winId).fadeIn("slow", function() {
+        $('#alertBox, ' + winId).css('display', 'block')
+      });
+    }, 50);
+  }
+
+  var winning = function() {
+    var win = ticTacToe.checkWin()
+
+    if (win === false) {
+      showEndgame('crossCounter', '#crossWin');
+      return false;
+
+    } else if (win === true) {
+      showEndgame('naughtCounter', '#naughtWin');
+      return true;
+    }
+  }
 
   var gameLoad = function() {
     setTimeout(function () {
@@ -68,79 +99,61 @@ $(document).ready(function() {
     $("#crossesScore").text('0');
   });
 
-  if(typeof(Storage) !== "undefined") {
-    var saveLocally = true;
-    var state = JSON.parse(sessionStorage.getItem('scores'))
-    if (state !==null) {
-      ticTacToe.scores = state;
+  //Albert the AI's main code
+  var albert = function() {
+
+    ticTacToe.checkSpace();
+
+    var defend = ticTacToe.defensiveMove();
+
+    if (defend) {
+      ticTacToe.gameBoard[defend] = "x";
+      $("#" + defend).addClass('cross');
+      winning();
+      ticTacToe.turnCounter += 1;
+      return;
     }
-  }
 
-  //$("#naughtsScore").html(sessionStorage.naughtCounter);
+    for ( var i = 0; i < ticTacToe.gameBoard.length; i++ ) {
+      if ( ticTacToe.gameBoard[i] == "/" ) {
+        ticTacToe.gameBoard[i] = "x";
+        $("#" + i).addClass('cross');
+        winning();
+        ticTacToe.turnCounter += 1;
+        return;
+      }
+    }
+  };
 
-  // if typeof storage is not undefined (getting the storage)
-  //
-  // savelocallly = true
-  //
-  // state = JSON.parse(LocalStorage.getItem('gameState'))
-  // check if state !== null
-  // game.players = state
-  // restoreGame(state) => restore the HTML
-
-
-
+  //The players code
   $('td').on('click', function(){
-    //the click on the current square is represented by $this
     var $this = $(this);
     var thisId = this.id;
 
-    //Don't do anything if the current square has already been clicked on
     if ( $this.hasClass('cross') || $this.hasClass('naught') ) {
       return;
     }
 
-    //Determine whose turn it is
-    ticTacToe.turnCounter = parseInt(ticTacToe.turnCounter) + 1;
+    $(this).addClass('naught')
 
-    //Place naught or cross on the table
-    if (ticTacToe.isOdd(ticTacToe.turnCounter) == true) {
-      $(this).addClass('naught')
-    } else {
-      $(this).addClass('cross')
-    }
+    ticTacToe.turnCounter += 1;
 
-    ticTacToe.recordScore(thisId, $this);
+    ticTacToe.gameBoard[parseInt(thisId)] = "o";
 
-    var showEndgame = function(winCounter, winId) {
-      ticTacToe.scores[winCounter] += 1
-      setTimeout(function () {
-        $("#alertBox, " + winId).fadeIn("slow", function() {
-          $('#alertBox, ' + winId).css('display', 'block')
-        });
-      }, 50);
-      //Save scores for the session
-      if(saveLocally == true){
-        sessionStorage.setItem('ticTacToe.scores', 'ticTacToe.scores')
-      }
-    }
+    winning();
 
-    //Check if there is a winner and notify them
-    var isWin = ticTacToe.checkWin(this)
-
-    if (isWin === true) {
-
-      if ($this.hasClass('cross')) {
-        showEndgame('crossCounter', '#crossWin');
-      } else {
-        showEndgame('naughtCounter', '#naughtWin');
-      }
-
+    console.log(ticTacToe.turnCounter)
+    if ( winning() == true ) {
+      return
+    } else if ( winning() !== true && ticTacToe.turnCounter < 9 ) {
+      albert();
     } else if( ticTacToe.turnCounter === 9 ){
       showEndgame('drawCounter', '#draw');
     }
+
   });
 
-  //Fade out lines on screen
+  //Fade out grid on screen
   var gameHide = function() {
     $("#leftVert, #rightVert, #topHor, #botHor").fadeOut(function() {
       $("#leftVert, #rightVert").css("height", '0px');
@@ -166,8 +179,9 @@ $(document).ready(function() {
       $('#draw').css('display', 'none')
 
     //Reset the game array and the turn counter
-    ticTacToe.gameBoard = ["","","","","","","","",""]
+    ticTacToe.gameBoard = ["/","/","/","/","/","/","/","/","/"]
     ticTacToe.turnCounter = 0;
+    ticTacToe.moves = {};
 
     //Record scores on the scoreboard
     $("#naughtsScore").text(ticTacToe.scores.naughtCounter);
