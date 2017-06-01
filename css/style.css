@@ -104,13 +104,13 @@ p {
   margin-right: auto;
   height: 120px;
   width: 500px;
-  background-color: #2E618C;
+  background-color: #c0e8fa;
   border-radius: 6px;
   display: none;
 }
 
 #naughtsScore, #drawScore, #crossesScore, #hN, #hD, #hC {
- width: 32%;
+ width: 32.5%;
  height: 50%;
  display: inline-block;
 }
@@ -135,7 +135,7 @@ p {
 #leftVert {
   width: 12px;
   height: 0px;
-  background-color: #2E618C;
+  background-color: #c0e8fa;
   position: absolute;
   top: 0px;
   left: 31.5%;
@@ -147,10 +147,10 @@ p {
 #rightVert {
   width: 12px;
   height: 0px;
-  background-color: #2E618C;
+  background-color: #c0e8fa;
   position: absolute;
   top: 0px;
-  left: 65%;
+  left: 66%;
   border-radius: 3px;
   z-index: 1;
   display: inline;
@@ -159,7 +159,7 @@ p {
 #topHor {
   width: 0px;
   height: 10px;
-  background-color: #2E618C;
+  background-color: #c0e8fa;
   position: absolute;
   top: 157px;
   border-radius: 3px;
@@ -169,7 +169,7 @@ p {
 #botHor{
   width: 0px;
   height: 10px;
-  background-color: #2E618C;
+  background-color: #c0e8fa;
   position: absolute;
   top: 324px;
   border-radius: 3px;
