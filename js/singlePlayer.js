@@ -101,6 +101,36 @@ $(document).ready(function() {
 
   //Albert the AI's main code
   var albert = function() {
+    //If a corner is selected, put the first x in the middle for the best starting move.
+    if (ticTacToe.turnCounter == 1){
+      if (ticTacToe.gameBoard[0] == "o" || ticTacToe.gameBoard[2] == "o" || ticTacToe.gameBoard[6] == "o" || ticTacToe.gameBoard[8] == "o") {
+
+        ticTacToe.gameBoard[4] = "x";
+
+        setTimeout(function () {
+          $("#4").addClass('cross');
+        }, 200);
+        ticTacToe.turnCounter += 1;
+        return;
+      }
+    } else {
+        ticTacToe.checkSpace();
+
+        var defend = ticTacToe.defensiveMove();
+
+        if (defend) {
+          ticTacToe.gameBoard[defend] = "x";
+
+          setTimeout(function () {
+            $("#" + defend).addClass('cross');
+          }, 200);
+
+          winning();
+
+          ticTacToe.turnCounter += 1;
+          return;
+        }
+      }
 
     ticTacToe.checkSpace();
 
@@ -108,49 +138,61 @@ $(document).ready(function() {
 
     if (defend) {
       ticTacToe.gameBoard[defend] = "x";
-      $("#" + defend).addClass('cross');
+
+      setTimeout(function () {
+        $("#" + defend).addClass('cross');
+      }, 200);
+
       winning();
+
       ticTacToe.turnCounter += 1;
       return;
     }
 
+    //If there are no defensive moves take the next available space on the board
     for ( var i = 0; i < ticTacToe.gameBoard.length; i++ ) {
       if ( ticTacToe.gameBoard[i] == "/" ) {
+
         ticTacToe.gameBoard[i] = "x";
-        $("#" + i).addClass('cross');
+
+        setTimeout(function () {
+          $("#" + i).addClass('cross');
+        }, 200);
+
         winning();
+
         ticTacToe.turnCounter += 1;
         return;
-      }
-    }
+      }//if
+    }//for
   };
 
   //The players code
   $('td').on('click', function(){
-    var $this = $(this);
-    var thisId = this.id;
+    var squareClass = $(this);
+    var squareId = this.id;
 
-    if ( $this.hasClass('cross') || $this.hasClass('naught') ) {
+    if ( squareClass.hasClass('cross') || squareClass.hasClass('naught') ) {
       return;
     }
 
-    $(this).addClass('naught')
+    squareClass.addClass('naught')
 
     ticTacToe.turnCounter += 1;
 
-    ticTacToe.gameBoard[parseInt(thisId)] = "o";
+    ticTacToe.gameBoard[parseInt(squareId)] = "o";
 
     winning();
 
-    console.log(ticTacToe.turnCounter)
-    if ( winning() == true ) {
+    if ( winning() ) {
       return
+
     } else if ( winning() !== true && ticTacToe.turnCounter < 9 ) {
       albert();
+
     } else if( ticTacToe.turnCounter === 9 ){
       showEndgame('drawCounter', '#draw');
     }
-
   });
 
   //Fade out grid on screen
