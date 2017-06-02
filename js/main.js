@@ -41,6 +41,12 @@ var ticTacToe = {
   }
 };
 
+var restoreGameUI = function() {
+  $("#naughtsScore").text(ticTacToe.scores.naughtCounter);
+  $("#drawScore").text(ticTacToe.scores.drawCounter);
+  $("#crossesScore").text(ticTacToe.scores.crossCounter);
+}
+
 $(document).ready(function() {
 
   //Animate lines on screen
@@ -66,29 +72,21 @@ $(document).ready(function() {
   //Load scoreboard with blank scores
   $("#scoreBoard").fadeIn(function() {
     $("#scoreBoard").css("height", "120px");
-    $("#naughtsScore").text('0');
-    $("#drawScore").text('0');
-    $("#crossesScore").text('0');
+    $("#naughtsScore").text(ticTacToe.scores.naughtCounter);
+    $("#drawScore").text(ticTacToe.scores.drawCounter);
+    $("#crossesScore").text(ticTacToe.scores.crossCounter);
   });
 
+  var saveLocally = false;
+
   if(typeof(Storage) !== "undefined") {
-    var saveLocally = true;
-    var state = JSON.parse(sessionStorage.getItem('scores'))
+    saveLocally = true;
+    var state = JSON.parse(localStorage.getItem('xxx'))
     if (state !==null) {
       ticTacToe.scores = state;
+      restoreGameUI()
     }
   }
-
-  //$("#naughtsScore").html(sessionStorage.naughtCounter);
-
-  // if typeof storage is not undefined (getting the storage)
-  //
-  // savelocallly = true
-  //
-  // state = JSON.parse(LocalStorage.getItem('gameState'))
-  // check if state !== null
-  // game.players = state
-  // restoreGame(state) => restore the HTML
 
   $('#reset').on('click', function(){
     gameHide();
@@ -107,9 +105,13 @@ $(document).ready(function() {
     ticTacToe.turnCounter = 0;
 
     //Record scores on the scoreboard
-    $("#naughtsScore").text(ticTacToe.scores.naughtCounter);
-    $("#drawScore").text(ticTacToe.scores.drawCounter);
-    $("#crossesScore").text(ticTacToe.scores.crossCounter);
+    $("#naughtsScore").text('0');
+    $("#drawScore").text('0');
+    $("#crossesScore").text('0');
+
+    ticTacToe.scores.drawCounter = 0;
+    ticTacToe.scores.crossCounter = 0;
+    ticTacToe.scores.naughtCounter = 0;
     gameLoad();
     })
   })
@@ -138,15 +140,16 @@ $(document).ready(function() {
 
     var showEndgame = function(winCounter, winId) {
       ticTacToe.scores[winCounter] += 1
+
+      if(saveLocally){
+        localStorage.setItem('xxx', JSON.stringify(ticTacToe.scores))
+      }
+
       setTimeout(function () {
         $("#alertBox, " + winId).fadeIn("slow", function() {
           $('#alertBox, ' + winId).css('display', 'block')
         });
       }, 50);
-      //Save scores for the session
-      if(saveLocally == true){
-        sessionStorage.setItem('ticTacToe.scores', 'ticTacToe.scores')
-      }
     }
 
     //Check if there is a winner and notify them

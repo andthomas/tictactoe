@@ -49,11 +49,34 @@ var ticTacToe = {
 
 }
 
+var restoreGameUI = function() {
+  $("#naughtsScore").text(ticTacToe.scores.naughtCounter);
+  $("#drawScore").text(ticTacToe.scores.drawCounter);
+  $("#crossesScore").text(ticTacToe.scores.crossCounter);
+}
 
 $(document).ready(function() {
+
+  var saveLocally = false;
+
+  if(typeof(Storage) !== "undefined") {
+    saveLocally = true;
+    var state = JSON.parse(localStorage.getItem('xxx'))
+    if (state !==null) {
+      ticTacToe.scores = state;
+      restoreGameUI()
+    }
+  }
+
   //Display winning screen and add point to score
   var showEndgame = function(winCounter, winId) {
+
     ticTacToe.scores[winCounter] += 1
+
+    if(saveLocally){
+      localStorage.setItem('xxx', JSON.stringify(ticTacToe.scores))
+    }
+
     setTimeout(function () {
       $("#alertBox, " + winId).fadeIn("slow", function() {
         $('#alertBox, ' + winId).css('display', 'block')
@@ -96,9 +119,9 @@ $(document).ready(function() {
   //Load scoreboard with blank scores
   $("#scoreBoard").fadeIn(function() {
     $("#scoreBoard").css("height", "120px");
-    $("#naughtsScore").text('0');
-    $("#drawScore").text('0');
-    $("#crossesScore").text('0');
+    $("#naughtsScore").text(ticTacToe.scores.naughtCounter);
+    $("#drawScore").text(ticTacToe.scores.drawCounter);
+    $("#crossesScore").text(ticTacToe.scores.crossCounter);
   });
 
   //Albert the AI's main code
@@ -184,12 +207,12 @@ $(document).ready(function() {
 
     ticTacToe.gameBoard[parseInt(squareId)] = "o";
 
-    winning();
+    var gameResult = winning();
 
-    if ( winning() ) {
+    if ( gameResult ) {
       return
 
-    } else if ( winning() !== true && ticTacToe.turnCounter < 9 ) {
+    } else if ( gameResult !== true && ticTacToe.turnCounter < 9 ) {
       albert();
 
     } else if( ticTacToe.turnCounter === 9 ){
@@ -213,12 +236,15 @@ $(document).ready(function() {
     //Reset the game array and the turn counter
     ticTacToe.gameBoard = ["/","/","/","/","/","/","/","/","/"]
     ticTacToe.turnCounter = 0;
-    ticTacToe.moves = {};
 
     //Record scores on the scoreboard
-    $("#naughtsScore").text(ticTacToe.scores.naughtCounter);
-    $("#drawScore").text(ticTacToe.scores.drawCounter);
-    $("#crossesScore").text(ticTacToe.scores.crossCounter);
+    $("#naughtsScore").text('0');
+    $("#drawScore").text('0');
+    $("#crossesScore").text('0');
+
+    ticTacToe.scores.drawCounter = 0;
+    ticTacToe.scores.crossCounter = 0;
+    ticTacToe.scores.naughtCounter = 0;
     gameLoad();
     })
   })
