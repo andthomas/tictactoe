@@ -195,3 +195,14 @@ a.button {
     border-radius: 3px;
     display: inline;
 }
+
+
+@media (orientation: portrait) {
+  h1 {
+    padding-bottom: 1%;
+    text-align: center;
+    font-size: 50px;
+    font-family: 'Raleway', sans-serif;
+    color: rgb(57, 57, 57);
+  }
+}
