@@ -8,6 +8,7 @@ var ticTacToe = {
 
   wins:  { one:[0,3,6], two:[1,4,7], three:[2,5,8], four:[0,1,2], five:[3,4,5], six:[6,7,8], seven:[0,4,8], eight:[2,4,6] },
 
+  //check if there are 3 x's or o's in a row according to the possible winning combinations in the wins object
   checkWin: function() {
     for (var x in this.wins) {
       if (this.gameBoard[this.wins[x][0]] === "o" && this.gameBoard[this.wins[x][2]] === "o" && this.gameBoard[this.wins[x][1]] === "o") {
@@ -48,8 +49,9 @@ var ticTacToe = {
 
 }
 
-$(document).ready(function() {
 
+$(document).ready(function() {
+  //Display winning screen and add point to score
   var showEndgame = function(winCounter, winId) {
     ticTacToe.scores[winCounter] += 1
     setTimeout(function () {
@@ -194,6 +196,32 @@ $(document).ready(function() {
       showEndgame('drawCounter', '#draw');
     }
   });
+
+  //Reset button
+  $('#reset').on('click', function(){
+    gameHide();
+    $("td").removeClass('naught');
+    $("td").removeClass('cross');
+
+    //Get rid of alert
+    $("#alertBox").fadeOut("slow",function() {
+      $('#alertBox').css('display', 'none')
+      $('#naughtWin').css('display', 'none')
+      $('#crossWin').css('display', 'none')
+      $('#draw').css('display', 'none')
+
+    //Reset the game array and the turn counter
+    ticTacToe.gameBoard = ["/","/","/","/","/","/","/","/","/"]
+    ticTacToe.turnCounter = 0;
+    ticTacToe.moves = {};
+
+    //Record scores on the scoreboard
+    $("#naughtsScore").text(ticTacToe.scores.naughtCounter);
+    $("#drawScore").text(ticTacToe.scores.drawCounter);
+    $("#crossesScore").text(ticTacToe.scores.crossCounter);
+    gameLoad();
+    })
+  })
 
   //Fade out grid on screen
   var gameHide = function() {

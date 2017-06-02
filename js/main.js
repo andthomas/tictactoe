@@ -18,6 +18,7 @@ var ticTacToe = {
     }
   },
 
+  //Change turns according to the total turns had
   isOdd: function(turnCounter) {
     if (turnCounter % 2) {
       0;
@@ -27,6 +28,7 @@ var ticTacToe = {
     }
   },
 
+  //Push 0 or 1 to array for naught and cross
   recordScore: function(thisId, thisClass) {
     num = parseInt(thisId);
     if (thisClass.is(".cross")) {
@@ -41,6 +43,7 @@ var ticTacToe = {
 
 $(document).ready(function() {
 
+  //Animate lines on screen
   var gameLoad = function() {
     setTimeout(function () {
       $("#leftVert").animate({height: '500px'}, 'slow');
@@ -87,7 +90,29 @@ $(document).ready(function() {
   // game.players = state
   // restoreGame(state) => restore the HTML
 
+  $('#reset').on('click', function(){
+    gameHide();
+    $("td").removeClass('naught');
+    $("td").removeClass('cross');
 
+    //Get rid of alert
+    $("#alertBox").fadeOut("slow",function() {
+      $('#alertBox').css('display', 'none')
+      $('#naughtWin').css('display', 'none')
+      $('#crossWin').css('display', 'none')
+      $('#draw').css('display', 'none')
+
+    //Reset the game array and the turn counter
+    ticTacToe.gameBoard = ["","","","","","","","",""]
+    ticTacToe.turnCounter = 0;
+
+    //Record scores on the scoreboard
+    $("#naughtsScore").text(ticTacToe.scores.naughtCounter);
+    $("#drawScore").text(ticTacToe.scores.drawCounter);
+    $("#crossesScore").text(ticTacToe.scores.crossCounter);
+    gameLoad();
+    })
+  })
 
   $('td').on('click', function(){
     //the click on the current square is represented by $this
