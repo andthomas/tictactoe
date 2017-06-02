@@ -1,6 +1,6 @@
 body {
   margin: 0 auto;
-  max-width: 600px;
+  max-width: 500px;
   background-color:#FFFAFF;
   z-index: -2;
   position: relative;
@@ -199,10 +199,38 @@ a.button {
 
 @media (orientation: portrait) {
   h1 {
-    padding-bottom: 1%;
+    padding-bottom: 5%;
     text-align: center;
-    font-size: 50px;
+    font-size: 100px;
     font-family: 'Raleway', sans-serif;
     color: rgb(57, 57, 57);
+  }
+
+  #scoreBoard {
+    margin-top: 6%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 120px;
+    width: 500px;
+    background-color: #c0e8fa;
+    border-radius: 6px;
+    display: none;
+  }
+  a.button {
+      -webkit-appearance: button;
+      -moz-appearance: button;
+      appearance: button;
+      text-decoration: none;
+      color: #c0e8fa;
+      box-shadow: 0px 0px 5px #888888;
+      text-align: center;
+      font-size: 19px;
+      font-family: 'Raleway', sans-serif;
+      color: rgb(57, 57, 57);
+      padding: 3px;
+      margin: 0 auto;
+      width: 200px;
+      border-radius: 3px;
+      display: inline;
   }
 }
