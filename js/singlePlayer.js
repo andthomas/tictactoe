@@ -4,7 +4,7 @@ var ticTacToe = {
 
   scores: { drawCounter: 0, naughtCounter: 0, crossCounter: 0 },
 
-  gameBoard: ["/","/","/","/","/","/","/","/","/"],
+  gameBoard: ["","","","","","","","",""],
 
   wins:  { one:[0,3,6], two:[1,4,7], three:[2,5,8], four:[0,1,2], five:[3,4,5], six:[6,7,8], seven:[0,4,8], eight:[2,4,6] },
 
@@ -23,7 +23,7 @@ var ticTacToe = {
   //An empty array to store possible defensive moves for Albert
   moves: { },
 
-  // Albert checks if there is any winning combinations with naughts in a row
+  // Albert checks if there is any winning combinations with 2 naughts
   checkSpace: function() {
     for (var x in this.wins) {
       if ( (this.gameBoard[this.wins[x][0]] === "o" && this.gameBoard[this.wins[x][1]] === "o") ||
@@ -40,14 +40,14 @@ var ticTacToe = {
     for ( var x in this.moves ) {
       for ( var i = 0; i < this.moves[x].length; i++ ) {
         var poss = this.moves[x][i]
-        if ( this.gameBoard[poss] === "/") {
+        if ( this.gameBoard[poss] === "") {
           return poss;
         }
       }
     }
   }
 
-}
+} //ticTacToe
 
 var restoreGameUI = function() {
   $("#naughtsScore").text(ticTacToe.scores.naughtCounter);
@@ -57,11 +57,12 @@ var restoreGameUI = function() {
 
 $(document).ready(function() {
 
+  //Check for local storage and retrieve if it exists
   var saveLocally = false;
 
   if(typeof(Storage) !== "undefined") {
     saveLocally = true;
-    var state = JSON.parse(localStorage.getItem('xxx'))
+    var state = JSON.parse(sessionStorage.getItem('xxx'))
     if (state !==null) {
       ticTacToe.scores = state;
       restoreGameUI()
@@ -74,7 +75,7 @@ $(document).ready(function() {
     ticTacToe.scores[winCounter] += 1
 
     if(saveLocally){
-      localStorage.setItem('xxx', JSON.stringify(ticTacToe.scores))
+      sessionStorage.setItem('xxx', JSON.stringify(ticTacToe.scores))
     }
 
     setTimeout(function () {
@@ -82,7 +83,7 @@ $(document).ready(function() {
         $('#alertBox, ' + winId).css('display', 'block')
       });
     }, 50);
-  }
+  };
 
   var winning = function() {
     var win = ticTacToe.checkWin()
@@ -114,14 +115,13 @@ $(document).ready(function() {
     },600);
   }
 
+  //Load the screen
   gameLoad();
 
   //Load scoreboard with blank scores
   $("#scoreBoard").fadeIn(function() {
     $("#scoreBoard").css("height", "120px");
-    $("#naughtsScore").text(ticTacToe.scores.naughtCounter);
-    $("#drawScore").text(ticTacToe.scores.drawCounter);
-    $("#crossesScore").text(ticTacToe.scores.crossCounter);
+    restoreGameUI();
   });
 
   //Albert the AI's main code
@@ -176,7 +176,7 @@ $(document).ready(function() {
 
     //If there are no defensive moves take the next available space on the board
     for ( var i = 0; i < ticTacToe.gameBoard.length; i++ ) {
-      if ( ticTacToe.gameBoard[i] == "/" ) {
+      if ( ticTacToe.gameBoard[i] == "" ) {
 
         ticTacToe.gameBoard[i] = "x";
 
@@ -234,17 +234,9 @@ $(document).ready(function() {
       $('#draw').css('display', 'none')
 
     //Reset the game array and the turn counter
-    ticTacToe.gameBoard = ["/","/","/","/","/","/","/","/","/"]
+    ticTacToe.gameBoard = ["","","","","","","","",""]
     ticTacToe.turnCounter = 0;
 
-    //Record scores on the scoreboard
-    $("#naughtsScore").text('0');
-    $("#drawScore").text('0');
-    $("#crossesScore").text('0');
-
-    ticTacToe.scores.drawCounter = 0;
-    ticTacToe.scores.crossCounter = 0;
-    ticTacToe.scores.naughtCounter = 0;
     gameLoad();
     })
   })
@@ -275,14 +267,12 @@ $(document).ready(function() {
       $('#draw').css('display', 'none')
 
     //Reset the game array and the turn counter
-    ticTacToe.gameBoard = ["/","/","/","/","/","/","/","/","/"]
+    ticTacToe.gameBoard = ["","","","","","","","",""]
     ticTacToe.turnCounter = 0;
     ticTacToe.moves = {};
 
     //Record scores on the scoreboard
-    $("#naughtsScore").text(ticTacToe.scores.naughtCounter);
-    $("#drawScore").text(ticTacToe.scores.drawCounter);
-    $("#crossesScore").text(ticTacToe.scores.crossCounter);
+    restoreGameUI()
     gameLoad();
     });
   });

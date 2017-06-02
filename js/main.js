@@ -81,7 +81,7 @@ $(document).ready(function() {
 
   if(typeof(Storage) !== "undefined") {
     saveLocally = true;
-    var state = JSON.parse(localStorage.getItem('xxx'))
+    var state = JSON.parse(sessionStorage.getItem('xxx'))
     if (state !==null) {
       ticTacToe.scores = state;
       restoreGameUI()
@@ -104,15 +104,8 @@ $(document).ready(function() {
     ticTacToe.gameBoard = ["","","","","","","","",""]
     ticTacToe.turnCounter = 0;
 
-    //Record scores on the scoreboard
-    $("#naughtsScore").text('0');
-    $("#drawScore").text('0');
-    $("#crossesScore").text('0');
-
-    ticTacToe.scores.drawCounter = 0;
-    ticTacToe.scores.crossCounter = 0;
-    ticTacToe.scores.naughtCounter = 0;
     gameLoad();
+
     })
   })
 
@@ -142,7 +135,7 @@ $(document).ready(function() {
       ticTacToe.scores[winCounter] += 1
 
       if(saveLocally){
-        localStorage.setItem('xxx', JSON.stringify(ticTacToe.scores))
+        sessionStorage.setItem('xxx', JSON.stringify(ticTacToe.scores))
       }
 
       setTimeout(function () {
